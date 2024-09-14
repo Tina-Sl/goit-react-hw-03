@@ -6,8 +6,14 @@
   padding: 5px 10px;
   width: 280px;
 }
-.cardContext {
+
+.cardContent {
   display: flex;
   flex-direction: column;
   width: 200px;
+}
+.cardLine {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }

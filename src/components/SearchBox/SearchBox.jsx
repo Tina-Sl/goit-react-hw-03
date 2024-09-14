@@ -1,6 +1,6 @@
 import s from "./SearchBox.module.css";
 
-const SearchBox = ({ value }) => {
+const SearchBox = ({ value, handleSelect }) => {
   return (
     <div className={s.searchBox}>
       <label className={s.searchLabel}>
@@ -10,6 +10,7 @@ const SearchBox = ({ value }) => {
           type="text"
           placeholder=""
           value={value}
+          onChange={(e) => handleSelect(e.target.value)}
         />
       </label>
     </div>

@@ -7,19 +7,19 @@ const Contact = ({
   // completed,
   name,
   number,
-  handleDeleteContact,
+  handleDelete,
 }) => {
   return (
     <li className={s.card}>
-      <div className={s.cardContext}>
-        <span>
+      <div className={s.cardContent}>
+        <span className={s.cardLine}>
           <FaUser /> {name}
         </span>
-        <span>
+        <span className={s.cardLine}>
           <FaPhoneAlt /> {number}
         </span>
       </div>
-      <button onClick={() => handleDeleteContact(id)}>Delete</button>
+      <button onClick={() => handleDelete(id)}>Delete</button>
     </li>
   );
 };
