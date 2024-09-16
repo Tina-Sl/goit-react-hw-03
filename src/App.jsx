@@ -7,7 +7,6 @@ import contactsData from "./assets/contacts.json";
 
 import { nanoid } from "nanoid";
 import { useState, useEffect } from "react";
-// import "./App.css";
 
 function App() {
   const [contacts, setContacts] = useState(
@@ -17,9 +16,6 @@ function App() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (contacts.length === 0) {
-      localStorage.removeItem("saved-contacts");
-    }
     localStorage.setItem("saved-contacts", JSON.stringify(contacts));
   }, [contacts]);
 
@@ -48,6 +44,9 @@ function App() {
         <ContactList contacts={selectedContacts} handleDelete={deleteContact} />
       ) : (
         <Notification text="No contacts in the phonebook" />
+      )}
+      {selectedContacts.length === 0 && contacts.length !== 0 && (
+        <Notification text="Сontact not found" />
       )}
     </div>
   );

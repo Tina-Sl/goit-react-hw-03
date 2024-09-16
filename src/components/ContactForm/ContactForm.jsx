@@ -3,24 +3,43 @@ import * as Yup from "yup";
 
 import s from "./ContactForm.module.css";
 
+let verNumber = "";
+//  дозволимо користувачеві вводити номер телефона без дефісів
+
+const orderSchema = Yup.object().shape({
+  name: Yup.string()
+    .matches(
+      /^[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]+$/,
+      "Only English or Ukrainian letters, space and hyphen"
+    )
+    .min(3, "must be at least 3 long")
+    .max(50, "must be 50 characters or less")
+    .required("this field is required"),
+  number: Yup.string()
+    .test("phoneValid", "must be in format XXX-XX-XX or XXXXXXX", (value) =>
+      isPhone(value)
+    )
+    .required("this field is required"),
+});
+
+const isPhone = (value) => {
+  const isDigitsOnly = /^\d+$/.test(value);
+  if (isDigitsOnly && value.length === 7) {
+    value = value.slice(0, 3) + "-" + value.slice(3, 5) + "-" + value.slice(5);
+  }
+  verNumber = value;
+  const regex = /^\d{3}-\d{2}-\d{2}$/;
+  return regex.test(value);
+};
+
 const ContactForm = ({ addContact }) => {
   const initialValues = {
     name: "",
     number: "",
   };
 
-  const orderSchema = Yup.object().shape({
-    name: Yup.string()
-      .matches(/^[a-zA-Z]+$/, "Only words")
-      .min(3, "must be at least 3 characters")
-      .max(50, "must be 50 characters or less")
-      .required("this field is required"),
-    number: Yup.string()
-      .matches(/^\d{3}-\d{2}-\d{2}$/, "invalid phone number format")
-      .required("this field is required"),
-  });
-
   const handleSubmit = (values, options) => {
+    values.number = verNumber;
     addContact(values);
     options.resetForm();
   };
@@ -35,20 +54,23 @@ const ContactForm = ({ addContact }) => {
         <Form className={s.formBox}>
           <label className={s.label}>
             <span>Name:</span>
-            <Field name="name" className={s.input} placeholder="Введіть ім'я" />
+            <Field name="name" type="text" className={s.input} />
             <ErrorMessage name="name" component="p" className={s.error} />
           </label>
           <label className={s.label}>
             <span>Number:</span>
             <Field
               name="number"
+              type="text"
               className={s.input}
-              placeholder="Введіть phone"
+              placeholder="xxx-xx-xx or xxxxxxx"
             />
             <ErrorMessage name="number" component="p" className={s.error} />
           </label>
 
-          <button type="submit">Add contact</button>
+          <button className={s.button} type="submit">
+            Add contact
+          </button>
         </Form>
       </Formik>
     </div>
